@@ -146,12 +146,9 @@ func WithVars(ctx context.Context, r *http.Request) context.Context {
 // fields will display. Request loggers can safely be pushed onto the context.
 func GetRequestLogger(ctx context.Context) Logger {
 	return GetLogger(ctx,
-		"http.request.id",
 		"http.request.method",
 		"http.request.host",
 		"http.request.uri",
-		"http.request.referer",
-		"http.request.useragent",
 		"http.request.remoteaddr",
 		"http.request.contenttype")
 }

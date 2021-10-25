@@ -3,14 +3,13 @@ package context
 import (
 	"context"
 	"fmt"
-	"runtime"
 	"sync"
 
 	"github.com/sirupsen/logrus"
 )
 
 var (
-	defaultLogger   *logrus.Entry = logrus.StandardLogger().WithField("go.version", runtime.Version())
+	defaultLogger   *logrus.Entry = logrus.StandardLogger().WithFields(logrus.Fields{})
 	defaultLoggerMu sync.RWMutex
 )
 
@@ -114,16 +113,8 @@ func getLogrusLogger(ctx context.Context, keys ...interface{}) *logrus.Entry {
 	}
 
 	if logger == nil {
-		fields := logrus.Fields{}
-
-		// Fill in the instance id, if we have it.
-		instanceID := ctx.Value("instance.id")
-		if instanceID != nil {
-			fields["instance.id"] = instanceID
-		}
-
 		defaultLoggerMu.RLock()
-		logger = defaultLogger.WithFields(fields)
+		logger = defaultLogger
 		defaultLoggerMu.RUnlock()
 	}
 
