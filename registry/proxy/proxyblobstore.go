@@ -131,7 +131,8 @@ func (pbs *proxyBlobStore) ServeBlob(ctx context.Context, w http.ResponseWriter,
 	mu.Unlock()
 
 	go func(dgst digest.Digest) {
-		if err := pbs.storeLocal(ctx, dgst); err != nil {
+		// temporary workaround for https://github.com/distribution/distribution/issues/3438
+		if err := pbs.storeLocal(context.Background(), dgst); err != nil {
 			dcontext.GetLogger(ctx).Errorf("Error committing to storage: %s", err.Error())
 		}
 
